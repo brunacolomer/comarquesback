@@ -46,12 +46,12 @@ class Command(BaseCommand):
                     if nom_comarca == "Baixa Cerdanya":
                         nom_comarca = "Cerdanya"
                     comarca = comarques.get(unidecode(nom_comarca.lower()))
-                   
-                    print(comarca, nom_comarca)
-                    poblacio = Poblacio.objects.get_or_create(
-                        nom=nom_municipi,
-                        comarca=comarca
-                    )
-                    municipis_afegits += 1
+                    if comarca is not None:
+                        print(comarca, nom_comarca)
+                        poblacio = Poblacio.objects.get_or_create(
+                            nom=nom_municipi,
+                            comarca=comarca
+                        )
+                        municipis_afegits += 1
                    
         self.stdout.write(self.style.SUCCESS(f"Import complet: {municipis_afegits} municipis afegits."))
