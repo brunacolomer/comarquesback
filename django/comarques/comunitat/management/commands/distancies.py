@@ -2,6 +2,7 @@ import random
 from django.core.management.base import BaseCommand
 from comunitat.models import Comarca, Distancia
 import pandas as pd
+import os
 import re
 from unidecode import unidecode
 
@@ -48,8 +49,10 @@ class Command(BaseCommand):
         comarques = list(Comarca.objects.all())
 
         total = 0
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        csv_path = os.path.join(BASE_DIR, 'comdist.csv')
 
-        df = pd.read_csv("/home/bruna/Baixades/comdist.csv")
+        df = pd.read_csv(csv_path)
         print(df.columns.tolist())
 
         df = df.replace(r'\s*,\s*', ',', regex=True)

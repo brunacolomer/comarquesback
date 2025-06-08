@@ -37,7 +37,7 @@ class Amistat(models.Model):
     usuari2 = models.ForeignKey(Usuari, on_delete=models.RESTRICT, related_name='amistats_usuari2')
     data = models.DateTimeField(auto_now_add=True)
     descripcio = models.TextField(blank=True, null=True)
-    foto = models.URLField( null=False)
+    foto = models.ImageField( upload_to='amistats/', null=False)
 
     class Meta:
         constraints = [
