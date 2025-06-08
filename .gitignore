@@ -2,3 +2,13 @@
 
 # Entorn virtual Python
 django/lib/
+
+
+django/bin/
+django/include/
+django/lib/
+django/pyvenv.cfg
+
+# Fitxers temporals Python
+__pycache__/
+*.pyc
