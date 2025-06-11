@@ -104,7 +104,7 @@ class Descripcio(models.Model):
 class Assolit(models.Model):
     repte = models.ForeignKey(Repte, on_delete=models.RESTRICT)
     comarca= models.ForeignKey(Comarca, on_delete=models.RESTRICT)
-    foto = models.URLField()
+    foto = models.ImageField( upload_to='reptes/', null=False)
     descripcio = models.TextField(blank=True, null=True)
     data = models.DateTimeField(auto_now_add=True)
 

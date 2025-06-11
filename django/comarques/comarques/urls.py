@@ -20,7 +20,7 @@ from comunitat.views import RegistreView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from comunitat.views import RegistreView, LlistaPoblacionsView, CrearAmistatView, AmistatsPerComarcaView, UsuariRankingView
+from comunitat.views import RegistreView, LlistaPoblacionsView, CrearAmistatView, AmistatsPerComarcaView, UsuariRankingView, CrearRepteOriginalView, DetallRepteView, AfegirDescripcioComarcaView, AssolitView, CrearRepteCopiatView
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -39,6 +39,11 @@ urlpatterns += [
     path('api/amistats/crear/', CrearAmistatView.as_view(), name='crear_amistat'),
     path('api/amistats/comarques/', AmistatsPerComarcaView.as_view(), name='amistats_per_comarca'),
     path('api/amistats/ranking/', UsuariRankingView.as_view(), name='ranking_amics'),
+    path('api/repte/original/', CrearRepteOriginalView.as_view(), name='crear_repte_original'),
+    path('api/repte/copiat/', CrearRepteCopiatView.as_view(), name='crear_repte_copiat'),
+    path('api/repte/<int:repte_id>/descripcio', AfegirDescripcioComarcaView.as_view(), name='crear o modificar descripcio'),
+    path('api/repte/<int:repte_id>/', DetallRepteView.as_view(), name='detall_repte'),
+    path('api/repte/<int:repte_id>/assolit', AssolitView.as_view(), name='assolit_repte')   
 ]
 
 schema_view = get_schema_view(

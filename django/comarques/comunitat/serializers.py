@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Usuari, Poblacio, Amistat
+from .models import Usuari, Poblacio, Amistat, Original, Descripcio, Comarca, Assolit, Copiat
 
 class RegistreSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,4 +52,60 @@ class UsuariRankingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuari
         fields = ['username', 'puntuacio']
-        
+
+class OriginalRepteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Original
+        fields = ['titol', 'visiblitat', 'permissos']
+    def create(self, validated_data):
+        usuari = self.context['request'].user
+        return Original.objects.create(usuari=usuari,**validated_data)
+
+class CopiaRepteSerializer(serializers.ModelSerializer):
+    basat = serializers.PrimaryKeyRelatedField(queryset=Original.objects.all(), write_only=True)
+    class Meta:
+        model = Copiat
+        fields = ['visiblitat', 'basat']
+    def create(self, validated_data):
+        usuari = self.context['request'].user
+        basat = validated_data.pop('basat')
+        return Copiat.objects.create(usuari=usuari, basat=basat, titol=basat.titol, visiblitat=validated_data['visiblitat'])
+
+
+class DescripcioSerializer(serializers.ModelSerializer):
+    comarca = serializers.SlugRelatedField(slug_field='nom', queryset=Comarca.objects.all())
+    class Meta:
+        model = Descripcio
+        fields = ['comarca', 'descripcio']
+    
+    def create(self, validated_data):
+        original = self.context['original']
+        comarca = validated_data['comarca']
+        text = validated_data['descripcio']
+        descripcio, created = Descripcio.objects.update_or_create(
+            original=original,
+            comarca=comarca,
+            defaults={'descripcio': text}
+        )
+        return descripcio
+    
+class AssolitSerializer(serializers.ModelSerializer):
+    comarca = serializers.SlugRelatedField(slug_field='nom', queryset=Comarca.objects.all())
+    foto = serializers.ImageField()
+    class Meta:
+        model = Assolit
+        fields = ['comarca', 'descripcio', 'data', 'foto']
+    
+    def create(self, validated_data):
+        repte = self.context['repte']
+        assolit, _ = Assolit.objects.update_or_create(
+            repte=repte,
+            comarca=validated_data['comarca'],
+            defaults={
+                'foto': validated_data['foto'],
+                'descripcio': validated_data.get('descripcio')
+            }
+        )
+        return assolit
+
+
