@@ -16,6 +16,8 @@ Including another URLconf
 """
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenVerifyView
+
 from comunitat.views import RegistreView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -33,6 +35,7 @@ urlpatterns = [
 urlpatterns += [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenObtainPairView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     #path('api/token/blacklist/', TokenObtainPairView.as_view(), name='token_blacklist'),
     path('api/registre/', RegistreView.as_view(), name='registre'),
     path('api/poblacions/', LlistaPoblacionsView.as_view(), name='llista_poblacions'),
